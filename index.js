@@ -1,15 +1,11 @@
-'use strict';
+const express = require('express')
+const app = express()
+var http = require('http').createServer(app)
+var io = require('socket.io')(http);
 
-var fs = require('fs');
-var path = require('path');
+app.use(express.static('public', {
+  maxAge: '31556952000' // uses milliseconds per docs
+}));
 
-exports.get = function(event, context, callback) {
-  var contents = fs.readFileSync(`public${path.sep}index.html`);
-  var result = {
-    statusCode: 200,
-    body: contents.toString(),
-    headers: {'content-type': 'text/html'}
-  };
+http.listen(3000, () => { console.log('listening on *:3000'); });
 
-  callback(null, result);
-};
